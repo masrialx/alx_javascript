@@ -5,9 +5,12 @@ const myObject = {
   };
   console.log(myObject);
   
-  myObject.incr = function() {
-    this.value++;
-  };
+  Object.defineProperty(myObject, 'incr', {
+    value: function() {
+      this.value++;
+    },
+    enumerable: false, // This prevents the function from being enumerated
+  });
   
   myObject.incr();
   console.log(myObject);
