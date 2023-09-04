@@ -5,12 +5,13 @@ const myObject = {
     value: 12
   };
   
-  // Define the incr function as a named function
-  myObject.incr = function incr() {
+  function incr() {
     this.value++;
-  };
+  }
   
   console.log(myObject);
+  
+  myObject.incr = incr;
   
   myObject.incr();
   console.log(myObject);
