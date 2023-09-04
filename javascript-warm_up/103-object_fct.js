@@ -5,19 +5,24 @@ const myObject = {
   };
   console.log(myObject);
   
+  myObject.incr = function() {
+    this.value++;
+  };
+  
+  myObject.incr();
+  console.log(myObject);
+  
+  myObject.incr();
+  console.log(myObject);
+  
+  myObject.incr();
+  console.log(myObject);
+  
+  // Ensuring the incr property is shown as [Function]
   Object.defineProperty(myObject, 'incr', {
-    value: function() {
-      this.value++;
-    },
-    enumerable: false, // This prevents the function from being enumerated
+    value: myObject.incr,
+    enumerable: true,
+    configurable: true,
+    writable: true
   });
-  
-  myObject.incr();
-  console.log(myObject);
-  
-  myObject.incr();
-  console.log(myObject);
-  
-  myObject.incr();
-  console.log(myObject);
   
