@@ -16,9 +16,12 @@ request.get(apiUrl, (error, response, body) => {
   } else {
     try {
       const filmsData = JSON.parse(body).results;
-      const numberOfFilms = filmsData.filter((film) =>
-        film.characters.includes(`https://swapi-api.alx-tools.com/api/people/${characterId}/`)
-      ).length;
+      const numberOfFilms = filmsData.reduce((count, film) => {
+        if (film.characters.includes(`https://swapi-api.alx-tools.com/api/people/${characterId}/`)) {
+          return count + 1;
+        }
+        return count;
+      }, 0);
       console.log(numberOfFilms);
     } catch (parseError) {
       console.error('Error:', 'Failed to parse response data');
