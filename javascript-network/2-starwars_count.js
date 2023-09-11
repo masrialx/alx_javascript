@@ -1,32 +1,35 @@
 const request = require('request');
 
-if (process.argv.length !== 3) {
-  console.error('Usage: node 2-starwars_count.js <API URL>');
+const apiUrl = process.argv[2]; // Get the API URL from command line argument
+
+if (!apiUrl) {
+  console.error('Please provide the API URL as an argument.');
   process.exit(1);
 }
 
-const apiUrl = process.argv[2];
+// Character ID for Wedge Antilles
 const characterId = 18;
 
-request.get(apiUrl, (error, response, body) => {
-    if (error) {
-      console.error('Error:', error.message);
-    } else if (response.statusCode !== 200) {
-      console.error('Error:', `HTTP Status Code: ${response.statusCode}`);
-    } else {
-      try {
-        const filmsData = JSON.parse(body).results;
-        console.log(filmsData); // Add this line for debugging
-  
-        const numberOfFilms = filmsData.reduce((count, film) => {
-          if (film.characters.includes(`https://swapi-api.alx-tools.com/api/people/${characterId}/`)) {
-            return count + 1;
-          }
-          return count;
-        }, 0);
-        console.log(numberOfFilms);
-      } catch (parseError) {
-        console.error('Error:', 'Failed to parse response data');
-      }
-    }
-  });
+// Send a GET request to the Star Wars API
+request(apiUrl, (error, response, body) => {
+  if (error) {
+    console.error('Error:', error);
+    process.exit(1);
+  }
+
+  if (response.statusCode !== 200) {
+    console.error('API request failed with status code:', response.statusCode);
+    process.exit(1);
+  }
+
+  // Parse the JSON response
+  const data = JSON.parse(body);
+
+  // Filter the films where Wedge Antilles is present
+  const filmsWithWedgeAntilles = data.results.filter((film) =>
+    film.characters.includes(`https://swapi-api.alx-tools.com/api/people/${characterId}/`)
+  );
+
+  // Print the number of films
+  console.log(filmsWithWedgeAntilles.length);
+});
