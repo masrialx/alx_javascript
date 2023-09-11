@@ -15,7 +15,11 @@ request.get(url, (error, response, body) => {
   } else if (response.statusCode !== 200) {
     console.error('Error:', `HTTP Status Code: ${response.statusCode}`);
   } else {
-    fs.writeFileSync(filePath, body, 'utf-8');
-    console.log(`Contents of the URL '${url}' have been saved to '${filePath}'.`);
+    if (body.trim().length === 0) {
+      console.log(`Empty response from URL '${url}'.`);
+    } else {
+      fs.writeFileSync(filePath, body, 'utf-8');
+      console.log(`Contents of the URL '${url}' have been saved to '${filePath}'.`);
+    }
   }
 });
