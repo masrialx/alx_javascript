@@ -1,4 +1,4 @@
-var studentHogwarts = (function () {
+function studentHogwarts() {
     var privateScore = 0;
     var name = null;
 
@@ -20,9 +20,9 @@ var studentHogwarts = (function () {
             return name + ': ' + privateScore;
         }
     };
-})();
+}
 
-var harry = Object.create(studentHogwarts);
+var harry = studentHogwarts();
 harry.setName('Harry');
 harry.rewardStudent();
 harry.rewardStudent();
@@ -30,7 +30,8 @@ harry.rewardStudent();
 harry.rewardStudent();
 
 console.log(harry.getScore()); 
-var draco = Object.create(studentHogwarts);
+
+var draco = studentHogwarts();
 draco.setName('Draco');
 draco.rewardStudent();
 draco.penalizeStudent();
