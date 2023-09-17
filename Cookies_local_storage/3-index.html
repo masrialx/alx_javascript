@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Application</title>
+</head>
+<body>
+    <div id="loginForm">
+        <h2>Login</h2>
+        <label for="firstname">First Name:</label>
+        <input type="text" id="firstname" placeholder="Enter your first name"><br>
+
+        <label for="email">Email:</label>
+        <input type="text" id="email" placeholder="Enter your email"><br>
+
+        <button onclick="setCookies()">Log me in</button>
+    </div>
+
+    <script>
+        function setCookies() {
+            const firstname = document.getElementById("firstname").value;
+            const email = document.getElementById("email").value;
+
+            // Set cookies with expiration date (10 days) and specific path ("/")
+            const expirationDate = new Date();
+            expirationDate.setDate(expirationDate.getDate() + 10); // Set expiration to 10 days from now
+            const options = `expires=${expirationDate.toUTCString()};path=/`;
+
+            document.cookie = `firstname=${firstname}; ${options}`;
+            document.cookie = `email=${email}; ${options}`;
+
+            // Call the function to show the welcome message or form
+            showWelcomeMessageOrForm();
+        }
+
+        function getCookie(name) {
+            const cookies = document.cookie.split(';');
+            for (const cookie of cookies) {
+                const [cookieName, cookieValue] = cookie.trim().split('=');
+                if (cookieName === name) {
+                    return cookieValue;
+                }
+            }
+            return "";
+        }
+
+        function deleteCookiesAndShowForm() {
+            // Delete the cookies by setting their expiration date to the past
+            const options = "expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
+            document.cookie = `firstname=; ${options}`;
+            document.cookie = `email=; ${options}`;
+
+            // Call the showForm function to display the login form
+            showForm();
+        }
+
+        function showForm() {
+            // Hide the welcome message if it exists
+            const welcomeMessage = document.getElementById("welcomeMessage");
+            if (welcomeMessage) {
+                welcomeMessage.style.display = "none";
+            }
+
+            // Show the login form
+            const loginForm = document.getElementById("loginForm");
+            loginForm.style.display = "block";
+        }
+
+        function showWelcomeMessageOrForm() {
+            const firstname = getCookie("firstname");
+
+            if (firstname) {
+                // User is logged in, build and display the welcome message
+                const body = document.querySelector('body');
+                body.innerHTML = ''; // Clear the body
+
+                // Create and style the welcome message
+                const welcomeMessage = document.createElement('h1');
+                welcomeMessage.style.fontStyle = "italic";
+                welcomeMessage.style.fontWeight = "normal";
+
+                // Create the logout link
+                const logoutLink = document.createElement('a');
+                logoutLink.textContent = "(logout)";
+                logoutLink.href = "#";
+                logoutLink.style.marginLeft = "10px";
+
+                // Add a click event listener to the logout link
+                logoutLink.addEventListener("click", function () {
+                    deleteCookiesAndShowForm();
+                    welcomeMessage.style.display = "none";
+                    showForm();
+                });
+
+                // Build the welcome message
+                welcomeMessage.textContent = `Welcome ${firstname} `;
+                welcomeMessage.appendChild(logoutLink);
+                body.appendChild(welcomeMessage);
+            } else {
+                // User is not logged in, show the login form
+                showForm();
+            }
+        }
+
+        // Initial call to show the welcome message or form
+        showWelcomeMessageOrForm();
+    </script>
+</body>
+</html>
