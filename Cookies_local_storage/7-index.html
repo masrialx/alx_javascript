@@ -9,20 +9,16 @@
     <script src="src/index.js"></script>
 
     <script>
-        // Check if Session Storage is supported
         if (typeof(Storage) === "undefined" || typeof(sessionStorage) === "undefined") {
             alert("Sorry, your browser does not support Session storage. Try again with a better one.");
         } else {
-            // Define available items
             const availableItems = ["Shampoo", "Soap", "Sponge", "Water"];
         
-            // Function to get the cart from Session Storage
             function getCartFromStorage() {
                 const cartString = sessionStorage.getItem("cart");
                 return cartString ? JSON.parse(cartString) : {};
             }
         
-            // Function to add an item to the cart
             function addItemToCart(item) {
                 const cart = getCartFromStorage();
                 if (cart[item]) {
@@ -34,7 +30,6 @@
                 displayCart();
             }
         
-            // Function to remove an item from the cart
             function removeItemFromCart(item) {
                 const cart = getCartFromStorage();
                 if (cart[item]) {
@@ -44,13 +39,11 @@
                 }
             }
         
-            // Function to clear the entire cart
             function clearCart() {
                 sessionStorage.removeItem("cart");
                 displayCart();
             }
         
-            // Function to create the store and display available items
             function createStore() {
                 const h2 = document.createElement("h2");
                 h2.textContent = "Available products:";
@@ -68,7 +61,6 @@
                 document.body.appendChild(ul);
             }
         
-            // Function to display the cart contents
             function displayCart() {
                 const h2Cart = document.createElement("h2");
                 h2Cart.textContent = "Your cart:";
@@ -119,7 +111,6 @@
                 document.body.appendChild(cartDiv);
             }
         
-            // Initialize the application by creating the store and displaying the cart
             createStore();
             displayCart();
         }
