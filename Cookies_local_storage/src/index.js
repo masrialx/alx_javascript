@@ -1,24 +1,42 @@
-function setCookies() {
-    const firstname = document.getElementById("firstname").value;
-    const email = document.getElementById("email").value;
+// Check if Session Storage is supported
+if (typeof(Storage) === "undefined" || typeof(sessionStorage) === "undefined") {
+  alert("Sorry, your browser does not support Session storage. Try again with a better one.");
+} else {
+  // Define available items
+  const availableItems = ["Shampoo", "Soap", "Sponge", "Water"];
 
-    const expirationDate = new Date();
-    expirationDate.setDate(expirationDate.getDate() + 10); // Set expiration to 10 days from now
-    const options = `expires=${expirationDate.toUTCString()};path=/`;
+  // Create a function to add an item to the cart in Session Storage
+  function addItemToCart(item) {
+      sessionStorage.setItem(item, "true");
+      displayCart();
+  }
 
-    document.cookie = `firstname=${firstname}; ${options}`;
-    document.cookie = `email=${email}; ${options}`;
-}
+  // Create a function to build the store and display available items
+  function createStore() {
+      const ul = document.createElement("ul");
+      for (const item of availableItems) {
+          const li = document.createElement("li");
+          li.textContent = item;
+          li.addEventListener("click", function () {
+              addItemToCart(item);
+          });
+          ul.appendChild(li);
+      }
+      document.body.appendChild(ul);
+  }
 
-function showCookies() {
-    const cookies = document.cookie.split(';');
+  // Create a function to display the cart contents
+  function displayCart() {
+      const cartItems = Object.keys(sessionStorage);
+      if (cartItems.length > 0) {
+          const message = `You previously had ${cartItems.length} items in your cart.`;
+          const p = document.createElement("p");
+          p.textContent = message;
+          document.body.appendChild(p);
+      }
+  }
 
-    const paragraph = document.createElement('p');
-
-    cookies.forEach(cookie => {
-        const [name, value] = cookie.trim().split('=');
-        paragraph.innerHTML += `${name}: ${value}<br>`;
-    });
-
-    document.body.appendChild(paragraph);
+  // Initialize the application by creating the store and displaying the cart
+  createStore();
+  displayCart();
 }
